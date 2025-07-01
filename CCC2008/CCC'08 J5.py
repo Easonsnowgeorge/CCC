@@ -1,0 +1,23 @@
+from functools import cache
+
+# each element is how much of a, b, c, and d are removed from the reaction
+reactions = [[2, 1, 0, 2], [1, 1, 1, 1], [0, 0, 2, 1], [0, 3, 0, 0], [1, 0, 0, 1]]
+
+
+# memoize to avoid recalculating and save time, also avoids making a 31^4 dp array
+@cache
+def can_win(a, b, c, d):
+    if a < 0 or b < 0 or c < 0 or d < 0:
+        return True
+
+    win = False
+    for aa, bb, cc, dd in reactions:
+        if not can_win(a - aa, b - bb, c - cc, d - dd):
+            win = True
+
+    return win
+
+
+for _ in range(int(input())):
+    vals = list(map(int, input().split()))
+    print("Patrick" if can_win(*vals) else "Roland")  # check is Patrick can win
